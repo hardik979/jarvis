@@ -1,0 +1,9 @@
+<resources>
+    <style name="Theme.Jarvis" parent="android:Theme.Material.Light.NoActionBar" />
+
+    <!-- See-through window: the Compose card slides up over whatever app is open. -->
+    <style name="Theme.Jarvis.Assistant">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+    </style>
+</resources>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- The orb: a cyan → violet → pink ring with a soft white core. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <path android:pathData="M30,54a24,24 0,1 0,48 0a24,24 0,1 0,-48 0">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:centerX="54"
+                android:centerY="54"
+                android:type="sweep">
+                <item android:color="#FF22D3EE" android:offset="0" />
+                <item android:color="#FF8B5CF6" android:offset="0.33" />
+                <item android:color="#FFEC4899" android:offset="0.66" />
+                <item android:color="#FF22D3EE" android:offset="1" />
+            </gradient>
+        </aapt:attr>
+    </path>
+    <path android:pathData="M36,54a18,18 0,1 0,36 0a18,18 0,1 0,-36 0">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:centerX="54"
+                android:centerY="54"
+                android:endColor="#00FFFFFF"
+                android:gradientRadius="18"
+                android:startColor="#CCFFFFFF"
+                android:type="radial" />
+        </aapt:attr>
+    </path>
+</vector>
