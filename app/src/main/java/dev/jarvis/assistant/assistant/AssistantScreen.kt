@@ -80,6 +80,14 @@ fun AssistantScreen(state: AssistantUiState, onOrbTap: () -> Unit, onDismiss: ()
                     state.error?.let {
                         Text(it, color = MaterialTheme.colorScheme.error, textAlign = TextAlign.Center)
                     }
+                    state.debug?.takeIf { it.isNotEmpty() }?.let {
+                        Text(
+                            it,
+                            style = MaterialTheme.typography.labelSmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            textAlign = TextAlign.Center,
+                        )
+                    }
                     Orb(
                         phase = state.phase,
                         level = state.level,
@@ -95,7 +103,7 @@ fun AssistantScreen(state: AssistantUiState, onOrbTap: () -> Unit, onDismiss: ()
 }
 
 private fun AssistantUiState.statusLabel() = when (phase) {
-    Phase.Listening -> "Listening…"
+    Phase.Listening -> if (waitingForMore) "Go on, I'm listening… (tap when done)" else "Listening… (tap when done)"
     Phase.Thinking -> "Thinking…"
     Phase.Speaking -> "Jarvis"
     Phase.Idle -> "Tap the orb to talk"

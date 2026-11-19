@@ -1,0 +1,185 @@
+{
+  "model": "Qwen3.5-2B-Q4_0",
+  "file_gb": 1.21,
+  "raw": {
+    "prefill_t5": 91.6,
+    "decode_t5": 16.3
+  },
+  "tokens": {
+    "english": 15,
+    "hindi": 25,
+    "hinglish": 18
+  },
+  "commands": [
+    {
+      "text": "{\"action\": \"message\", \"args\": {\"to\": \"Rahul\", \"text\": \"Main 10 minute late hoon.\"}, \"say\": \"Rahul ko message kiya: Main 10 minute late hoon.\"}",
+      "wall_s": 5.45,
+      "prompt_tokens": 198,
+      "first_token_ms": 2333,
+      "prefill_tps": 84.9,
+      "decode_tps": 17.1,
+      "tokens_out": 52,
+      "ok": true,
+      "utterance": "Rahul ko message karo ki main 10 minute late hoon"
+    },
+    {
+      "text": "{\n  \"action\": \"alarm\",\n  \"args\": {\n    \"time\": \"06:00\"\n  },\n  \"say\": \"Subah 6 baje alarm set ho gaya hai.\"\n}",
+      "wall_s": 4.42,
+      "prompt_tokens": 29,
+      "first_token_ms": 472,
+      "prefill_tps": 61.4,
+      "decode_tps": 13.6,
+      "tokens_out": 52,
+      "ok": true,
+      "utterance": "kal subah gym jaana hai, 6 baje utha dena"
+    },
+    {
+      "text": "{\"action\": \"volume\", \"args\": {\"change\": \"up\"}, \"say\": \"Maine volume up kar diya hai.\"}",
+      "wall_s": 3.93,
+      "prompt_tokens": 26,
+      "first_token_ms": 760,
+      "prefill_tps": 34.2,
+      "decode_tps": 10.9,
+      "tokens_out": 30,
+      "ok": false,
+      "utterance": "itna andhera hai, thodi roshni karo"
+    },
+    {
+      "text": "{\"action\": \"media\", \"args\": {\"action\": \"play\", \"media\": \"slow_motion\", \"song\": \"user_song\", \"speed\": \"slow\", \"volume\": \"medium\", \"quality\": \"high\", \"type\": \"mp3\", \"duration\": \"10:00\", \"genre\": \"indie\", \"artist\": \"user\", \"album\": \"user_album\", \"year\": \"2024\", \"track\": \"user_track\", \"title\": \"user_song\", \"description\": \"User's favorite song\", \"release_date\":",
+      "wall_s": 10.04,
+      "prompt_tokens": 20,
+      "first_token_ms": 365,
+      "prefill_tps": 54.7,
+      "decode_tps": 12.6,
+      "tokens_out": 120,
+      "ok": false,
+      "error": "JSONDecodeError('Expecting value: line 1 column 359 (char 358)')",
+      "utterance": "gaana thoda dheere karo"
+    },
+    {
+      "text": "{\n  \"action\": \"navigate\",\n  \"args\": {\n    \"place\": \"Delhi\"\n  },\n  \"say\": \"मैं दिल्ली की स्थानीय रेलवे स्टेशन (Delhi Railway Station) और दिल्ली एयरपोर्ट (Delhi Airport) के बीच का मार्गदर्शन कर सकता हूँ। आप कौन सा उतरना चाहते हैं?\"\n}",
+      "wall_s": 6.96,
+      "prompt_tokens": 23,
+      "first_token_ms": 499,
+      "prefill_tps": 46.1,
+      "decode_tps": 13.8,
+      "tokens_out": 90,
+      "ok": true,
+      "utterance": "मुझे दिल्ली जाना है, रास्ता दिखाओ"
+    },
+    {
+      "text": "{\n  \"action\": \"weather\",\n  \"args\": {\n    \"place\": \"Pune\",\n    \"day\": \"tomorrow\"\n  },\n  \"say\": \"Yes, there is a 40% chance of rain in Pune tomorrow.\"\n}",
+      "wall_s": 4.77,
+      "prompt_tokens": 19,
+      "first_token_ms": 446,
+      "prefill_tps": 42.6,
+      "decode_tps": 14.2,
+      "tokens_out": 62,
+      "ok": true,
+      "utterance": "Will it rain in Pune tomorrow?"
+    },
+    {
+      "text": "{\"action\": \"chat\", \"args\": {\"text\": \"Haan, main aapki yaad dilata hoon. Kya baat hai aapke liye?\"},\"say\": \"Haan, main aapki yaad dilata hoon. Kya baat hai aapke liye?\"}",
+      "wall_s": 5.45,
+      "prompt_tokens": 22,
+      "first_token_ms": 459,
+      "prefill_tps": 47.9,
+      "decode_tps": 13.9,
+      "tokens_out": 70,
+      "ok": false,
+      "utterance": "aadhe ghante baad yaad dilana"
+    },
+    {
+      "text": "{\n  \"action\": \"chat\",\n  \"args\": {\n    \"who\": \"India\"\n  },\n  \"say\": \"India won the 2011 Cricket World Cup.\"\n}",
+      "wall_s": 3.83,
+      "prompt_tokens": 24,
+      "first_token_ms": 446,
+      "prefill_tps": 53.8,
+      "decode_tps": 14.1,
+      "tokens_out": 48,
+      "ok": true,
+      "utterance": "Who won the 2011 cricket world cup?"
+    },
+    {
+      "text": "{\n  \"action\": \"chat\",\n  \"args\": {\n    \"who\": \"मुझे\",\n    \"text\": \"मुझे थोड़ा उजाला और ऊर्जा चाहिए। क्या मैं आपकी मदद कर सकता हूँ?\"\n  },\n  \"say\": \"मुझे थोड़ा उजाला और ऊर्जा चाहिए। क्या मैं आपकी मदद कर सकता हूँ?\"\n}",
+      "wall_s": 7.32,
+      "prompt_tokens": 30,
+      "first_token_ms": 588,
+      "prefill_tps": 51.0,
+      "decode_tps": 14.3,
+      "tokens_out": 97,
+      "ok": true,
+      "utterance": "भाई मेरा मूड खराब है, कुछ अच्छा बोलो"
+    },
+    {
+      "text": "{\"action\":\"open_app\",\"args\":{\"name\":\"swiggy\"},\"say\":\"swiggy app\"}",
+      "wall_s": 2.36,
+      "prompt_tokens": 25,
+      "first_token_ms": 496,
+      "prefill_tps": 50.4,
+      "decode_tps": 12.2,
+      "tokens_out": 23,
+      "ok": true,
+      "utterance": "the app where I order food, swiggy, open it"
+    },
+    {
+      "text": "{\"action\": \"call\", \"args\": {\"who\": \"पापा\"}, \"say\": \"पापा को फोन लगा रहा हूँ...\"}",
+      "wall_s": 3.08,
+      "prompt_tokens": 19,
+      "first_token_ms": 583,
+      "prefill_tps": 32.6,
+      "decode_tps": 12.9,
+      "tokens_out": 33,
+      "ok": true,
+      "utterance": "पापा को फोन लगाओ"
+    },
+    {
+      "text": "{\"action\":\"media\",\"args\":{\"action\":\"pause\",\"song\":\"skip this song yaar\",\"track\":\"unknown\",\"artist\":\"unknown\",\"album\":\"unknown\",\"title\":\"skip this song yaar\",\"duration\":\"0:00\",\"duration_seconds\":0,\"playback\":\"audio\",\"source\":\"unknown\",\"source_type\":\"unknown\",\"source_name\":\"unknown\",\"source_url\":\"unknown\",\"source_url_type\":\"unknown\",\"source_url_scheme\":\"unknown\",\"source_url_scheme_type\":\"unknown\",\"source_url_scheme_type_type\":\"unknown\",\"source_url_scheme_type_type_type\":\"unknown\",\"source_url_scheme_type_type_type_type\":\"unknown",
+      "wall_s": 9.55,
+      "prompt_tokens": 17,
+      "first_token_ms": 384,
+      "prefill_tps": 44.3,
+      "decode_tps": 13.1,
+      "tokens_out": 120,
+      "ok": false,
+      "error": "JSONDecodeError('Unterminated string starting at: line 1 column 524 (char 523)')",
+      "utterance": "skip this song yaar"
+    }
+  ],
+  "command_accuracy": "8/12",
+  "first_token_ms_cold": 2333,
+  "first_token_ms_warm": 472,
+  "ram_mb": 1997,
+  "chats": [
+    {
+      "text": "भारत की राजधानी **नई दिल्ली** है। वहाँ घूमने लायक दो जगहें:\n\n1. **दिल्ली मॉर्टर पार्क (DMO)**: यह पुरानी इमारतों से बना एक विशाल पार्क है, जहाँ लोग हल्दी का तैरना और पार्क में बैठकर पाना पसंद करते हैं।\n2. **दिल्ली का पार्क (Delhi Park)**: यह एक बड़ा, सुंदर और हल्दी-पुस्तक-प्रेरित पार्क है, जहाँ लोग बैठकर पाना खाते हैं या पार्",
+      "wall_s": 28.27,
+      "prompt_tokens": 45,
+      "first_token_ms": 16028,
+      "prefill_tps": 2.8,
+      "decode_tps": 12.3,
+      "tokens_out": 150,
+      "prompt": "भारत की राजधानी क्या है और वहाँ घूमने लायक दो जगहें बताओ। छोटा जवाब दो।"
+    },
+    {
+      "text": "1. **Chhota khana:** Ek chhota sa khana khane se body mein energy aati hai aur neend aa jati hai.\n2. **Garam paani:** Garam paani peene se blood flow badhta hai aur neend aati hai.",
+      "wall_s": 4.92,
+      "prompt_tokens": 38,
+      "first_token_ms": 645,
+      "prefill_tps": 58.9,
+      "decode_tps": 14.5,
+      "tokens_out": 62,
+      "prompt": "Mujhe neend nahi aa rahi, 2 tips do. Hinglish mein chhota jawab do."
+    },
+    {
+      "text": "Sunlight contains all colors of the visible spectrum, but it scatters more efficiently in shorter wavelengths. Blue light, which has the shortest wavelength among visible colors, is scattered by molecules in the Earth's atmosphere much more strongly than other colors, causing the sky to appear blue to our eyes.",
+      "wall_s": 4.96,
+      "prompt_tokens": 23,
+      "first_token_ms": 722,
+      "prefill_tps": 31.8,
+      "decode_tps": 13.9,
+      "tokens_out": 59,
+      "prompt": "Explain in two sentences why the sky is blue."
+    }
+  ]
+}

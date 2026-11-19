@@ -1,0 +1,181 @@
+{
+  "model": "Qwen3.5-0.8B-Q4_0",
+  "prompt": "v2",
+  "file_gb": 0.51,
+  "tokens": {
+    "english": 15,
+    "hindi": 25,
+    "hinglish": 18
+  },
+  "commands": [
+    {
+      "text": "{\"action\":\"message\",\"to\":\"Rahul\",\"text\":\"Main 10 minute late hoon, main aapko bhi bhi 10 minute late hoon.\"}",
+      "wall_s": 3.86,
+      "prompt_tokens": 412,
+      "first_token_ms": 2643,
+      "prefill_tps": 155.9,
+      "decode_tps": 32.5,
+      "tokens_out": 39,
+      "ok": true,
+      "utterance": "Rahul ko message karo ki main 10 minute late hoon"
+    },
+    {
+      "text": "{\"action\":\"alarm\",\"time\":\"06:00\"}",
+      "wall_s": 0.67,
+      "prompt_tokens": 29,
+      "first_token_ms": 245,
+      "prefill_tps": 118.3,
+      "decode_tps": 33.3,
+      "tokens_out": 14,
+      "ok": true,
+      "utterance": "kal subah gym jaana hai, 6 baje utha dena"
+    },
+    {
+      "text": "{\"action\":\"chat\",\"reply\":\"तुमने कहा है, तुमने कहा है, तुमने कहा है, तुमने कहा है, तुमने कहा है, तुमने कहा है, तुमने कहा है, तुमने कहा है, तुमने कहा है, तुमने कहा है, तुमने कहा है, तुमने कहा है, तुमने कहा है, तुमने कहा है, तुमने कहा है, तुमने कहा है, तुमने कहा है, तु\"}",
+      "wall_s": 4.26,
+      "prompt_tokens": 26,
+      "first_token_ms": 246,
+      "prefill_tps": 105.8,
+      "decode_tps": 28.4,
+      "tokens_out": 114,
+      "ok": false,
+      "utterance": "itna andhera hai, thodi roshni karo"
+    },
+    {
+      "text": "{\"action\":\"media\",\"control\":\"previous\"}",
+      "wall_s": 0.49,
+      "prompt_tokens": 20,
+      "first_token_ms": 173,
+      "prefill_tps": 115.9,
+      "decode_tps": 33.1,
+      "tokens_out": 10,
+      "ok": false,
+      "utterance": "gaana thoda dheere karo"
+    },
+    {
+      "text": "{\"action\":\"navigate\",\"place\":\"Delhi\"}",
+      "wall_s": 0.59,
+      "prompt_tokens": 23,
+      "first_token_ms": 215,
+      "prefill_tps": 107.1,
+      "decode_tps": 30.3,
+      "tokens_out": 11,
+      "ok": true,
+      "utterance": "मुझे दिल्ली जाना है, रास्ता दिखाओ"
+    },
+    {
+      "text": "{\"action\":\"weather\",\"place\":\"Pune\",\"day\":\"tomorrow\"}",
+      "wall_s": 0.68,
+      "prompt_tokens": 19,
+      "first_token_ms": 199,
+      "prefill_tps": 95.6,
+      "decode_tps": 32.9,
+      "tokens_out": 16,
+      "ok": true,
+      "utterance": "Will it rain in Pune tomorrow?"
+    },
+    {
+      "text": "{\"action\":\"chat\",\"reply\":\"यह एक बहुत ही अच्छा और मज़ेदार गाना है। क्या आप इसे सुना सकते हैं?\"}",
+      "wall_s": 1.44,
+      "prompt_tokens": 22,
+      "first_token_ms": 221,
+      "prefill_tps": 99.5,
+      "decode_tps": 27.8,
+      "tokens_out": 34,
+      "ok": false,
+      "utterance": "aadhe ghante baad yaad dilana"
+    },
+    {
+      "text": "{\"action\":\"chat\",\"reply\":\"The 2011 Cricket World Cup was won by England against Australia. India lost the match 2-1.\"}",
+      "wall_s": 1.26,
+      "prompt_tokens": 24,
+      "first_token_ms": 219,
+      "prefill_tps": 109.5,
+      "decode_tps": 32.9,
+      "tokens_out": 34,
+      "ok": true,
+      "utterance": "Who won the 2011 cricket world cup?"
+    },
+    {
+      "text": "{\"action\":\"chat\",\"reply\":\"नमस्ते भाई, मूड खराब होने के लिए कुछ अच्छा गाना सुनाऊं या एक मज़ेदार किस्सा सुनाऊं?\"}",
+      "wall_s": 2.05,
+      "prompt_tokens": 30,
+      "first_token_ms": 276,
+      "prefill_tps": 108.9,
+      "decode_tps": 27.5,
+      "tokens_out": 49,
+      "ok": true,
+      "utterance": "भाई मेरा मूड खराब है, कुछ अच्छा बोलो"
+    },
+    {
+      "text": "{\"action\":\"open_app\",\"name\":\"Swiggy\"}",
+      "wall_s": 0.71,
+      "prompt_tokens": 25,
+      "first_token_ms": 242,
+      "prefill_tps": 103.5,
+      "decode_tps": 27.8,
+      "tokens_out": 13,
+      "ok": true,
+      "utterance": "the app where I order food, swiggy, open it"
+    },
+    {
+      "text": "{\"action\":\"open_app\",\"name\":\"WhatsApp\"}",
+      "wall_s": 0.54,
+      "prompt_tokens": 19,
+      "first_token_ms": 200,
+      "prefill_tps": 95.0,
+      "decode_tps": 33.4,
+      "tokens_out": 11,
+      "ok": false,
+      "utterance": "पापा को फोन लगाओ"
+    },
+    {
+      "text": "{\"action\":\"chat\",\"reply\":\"नहीं, बोलो, मैं तुम्हें बोल सकता हूँ।\"}",
+      "wall_s": 1.04,
+      "prompt_tokens": 17,
+      "first_token_ms": 176,
+      "prefill_tps": 96.6,
+      "decode_tps": 33.0,
+      "tokens_out": 28,
+      "ok": false,
+      "utterance": "skip this song yaar"
+    }
+  ],
+  "command_accuracy": "7/12",
+  "first_token_ms_cold": 2643,
+  "first_token_ms_warm": 219,
+  "reply_s_median": 0.71,
+  "ram_mb": 1239,
+  "chats": [
+    {
+      "text": "भारत की राजधानी **महाराष्ट्र** है।\n\nवहाँ घूमने लायक दो जगहें हैं:\n1. **मुंबई** (बॉलीवुड और कला के शहर)\n2. **दिल्ली** (कला और विज्ञान के शहर)",
+      "wall_s": 2.55,
+      "prompt_tokens": 45,
+      "first_token_ms": 299,
+      "prefill_tps": 150.3,
+      "decode_tps": 33.7,
+      "tokens_out": 74,
+      "prompt": "भारत की राजधानी क्या है और वहाँ घूमने लायक दो जगहें बताओ। छोटा जवाब दो।"
+    },
+    {
+      "text": "1. **Sleep hygiene kaat dhoondho:** Agar aapke paas aapki koi bhi khatre (kuch baad mein aapko aapke paas aapke paas aapke paas aapke paas aapke paas aapke paas aapke paas aapke paas aapke paas aapke paas aapke paas aapke paas aapke paas aapke paas aapke paas aapke paas aapke paas aapke paas aapke paas aapke paas aapke paas aapke paas aapke",
+      "wall_s": 4.63,
+      "prompt_tokens": 38,
+      "first_token_ms": 254,
+      "prefill_tps": 149.9,
+      "decode_tps": 34.3,
+      "tokens_out": 150,
+      "prompt": "Mujhe neend nahi aa rahi, 2 tips do. Hinglish mein chhota jawab do."
+    },
+    {
+      "text": "The sky appears blue because sunlight is scattered by the Earth's atmosphere, which is thicker near the horizon where it is longer and denser. This scattering causes shorter wavelengths of light (like blue) to travel through the atmosphere more easily than longer wavelengths (like red), resulting in the sky looking blue.",
+      "wall_s": 2.0,
+      "prompt_tokens": 23,
+      "first_token_ms": 189,
+      "prefill_tps": 121.4,
+      "decode_tps": 34.1,
+      "tokens_out": 61,
+      "prompt": "Explain in two sentences why the sky is blue."
+    }
+  ]
+}

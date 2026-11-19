@@ -1,6 +1,7 @@
 package dev.jarvis.assistant.assistant
 
 import android.content.Intent
+import android.speech.SpeechRecognizer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
 import androidx.lifecycle.viewModelScope
@@ -9,14 +10,16 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import dev.jarvis.assistant.JarvisApp
 import dev.jarvis.assistant.JarvisSettings
 import dev.jarvis.assistant.brain.Brain
+import dev.jarvis.assistant.brain.FollowUp
+import dev.jarvis.assistant.brain.HybridBrain
 import dev.jarvis.assistant.brain.Reply
-import dev.jarvis.assistant.brain.RuleBrain
 import dev.jarvis.assistant.brain.actions.CommandExecutor
 import dev.jarvis.assistant.voice.SpeechInput
 import dev.jarvis.assistant.voice.SpeechOutput
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -34,6 +37,9 @@ data class AssistantUiState(
     val level: Float = 0f,
     val heard: String = "",
     val reply: String = "",
+    val debug: String? = null,
+    /** Listening through a pause because the sentence sounded unfinished. */
+    val waitingForMore: Boolean = false,
     val error: String? = null,
 )
 
@@ -43,7 +49,7 @@ sealed interface Effect {
     data object Close : Effect
 }
 
-/** Runs one conversation turn at a time: listen → think → act → speak. */
+/** Runs the conversation: listen → think → act → speak, and again while Jarvis expects an answer. */
 class AssistantViewModel(
     private val speechInput: SpeechInput,
     private val speechOutput: SpeechOutput,
@@ -59,27 +65,28 @@ class AssistantViewModel(
 
     private var turn: Job? = null
 
-    /** Starts a fresh turn, cancelling whatever Jarvis was doing. */
+    /** Set when the user taps the orb to say they're done talking. */
+    private var userFinished = false
+
+    /** Starts a fresh conversation, cancelling whatever Jarvis was doing. */
     fun startTurn() {
         stopTurn()
-        turn = viewModelScope.launch {
-            val heard = listen() ?: return@launch
-            _state.update { it.copy(phase = Phase.Thinking) }
-            val reply = think(heard)
-            _state.update { it.copy(phase = if (reply.speak) Phase.Speaking else Phase.Idle, reply = reply.text) }
-            reply.launch?.let { _effects.send(Effect.Launch(it)) }
-            if (reply.speak) speechOutput.speak(reply.text)
-            _state.update { it.copy(phase = Phase.Idle) }
-            // Like Siri, get out of the way once the job is done. A new turn cancels this.
-            delay(AUTO_CLOSE_MS)
-            _effects.send(Effect.Close)
-        }
+        brain.newConversation()
+        // Load the LLM while the user is still talking, so the answer isn't held up by it.
+        viewModelScope.launch { runCatching { brain.prepare() } }
+        turn = viewModelScope.launch { converse() }
     }
 
     fun stopTurn() {
         turn?.cancel()
         speechOutput.stop()
-        _state.update { it.copy(phase = Phase.Idle, level = 0f) }
+        _state.update { it.copy(phase = Phase.Idle, level = 0f, waitingForMore = false) }
+    }
+
+    /** Orb tapped while listening: stop waiting and use what was said. */
+    fun finishSpeaking() {
+        userFinished = true
+        speechInput.finish()
     }
 
     fun onMicDenied() {
@@ -91,35 +98,106 @@ class AssistantViewModel(
         _state.update { it.copy(phase = Phase.Idle, error = "No app on this phone can do that.") }
     }
 
-    private suspend fun think(heard: String): Reply = try {
-        brain.respond(heard)
+    private suspend fun converse() {
+        var followUp: FollowUp? = null
+        while (true) {
+            val heard = hear(isFollowUp = followUp != null)
+            if (heard == null) {
+                // Silence after a follow-up question just means "nothing more"; real errors stay on screen.
+                if (followUp != null && _state.value.error == null) _effects.send(Effect.Close)
+                return
+            }
+            _state.update { it.copy(phase = Phase.Thinking) }
+            val reply = think(listOfNotNull(followUp?.prefix, heard).joinToString(" ").trim())
+            _state.update {
+                it.copy(phase = if (reply.speak) Phase.Speaking else Phase.Idle, reply = reply.text, debug = reply.debug)
+            }
+            reply.launch?.let { _effects.send(Effect.Launch(it)) }
+            if (reply.speak) speechOutput.speak(reply.text)
+            followUp = reply.followUp ?: break
+        }
+        _state.update { it.copy(phase = Phase.Idle) }
+        // Like Siri, get out of the way once the job is done. A new turn cancels this.
+        delay(AUTO_CLOSE_MS)
+        _effects.send(Effect.Close)
+    }
+
+    private suspend fun think(input: String): Reply = try {
+        brain.respond(input)
     } catch (e: CancellationException) {
         throw e
     } catch (e: Exception) {
         Reply("Something went wrong: ${e.message ?: e.javaClass.simpleName}")
     }
 
-    /** Returns what the user said, or null if nothing usable was heard. */
-    private suspend fun listen(): String? {
+    /**
+     * Listens until the user has really finished. After a pause, if the sentence sounds unfinished
+     * ("Mummy ko…"), keeps listening and joins the parts. Returns null if nothing usable was said.
+     */
+    private suspend fun hear(isFollowUp: Boolean): String? {
+        userFinished = false
         _state.value = AssistantUiState(phase = Phase.Listening)
+        val first = listenOnce(before = "", startWithin = if (isFollowUp) FOLLOW_UP_WINDOW_MS else null)
+        if (first == null) {
+            val code = lastError ?: SpeechRecognizer.ERROR_NO_MATCH
+            val error = if (isFollowUp && SpeechInput.isSilence(code)) null else SpeechInput.describe(code)
+            _state.update { it.copy(phase = Phase.Idle, level = 0f, error = error) }
+            return null
+        }
+        var text: String = first
+        while (!userFinished && brain.wantsMore(text)) {
+            _state.update { it.copy(waitingForMore = true) }
+            val more = listenOnce(before = text, startWithin = settings.listenPatience.continueMillis) ?: break
+            text = "$text $more"
+        }
+        _state.update { it.copy(heard = text, waitingForMore = false) }
+        return text
+    }
+
+    private var lastError: Int? = null
+
+    /**
+     * One recogniser session; [before] is shown ahead of the live transcript. With [startWithin], gives
+     * up if the user hasn't started talking by then. Returns null if nothing was said.
+     */
+    private suspend fun listenOnce(before: String, startWithin: Long?): String? {
+        repeat(2) { attempt ->
+            val text = session(before, startWithin)
+            // Restarting right after a session can briefly find the recogniser still busy.
+            if (text != null || lastError != SpeechRecognizer.ERROR_RECOGNIZER_BUSY || attempt == 1) return text
+            delay(300)
+        }
+        return null
+    }
+
+    private suspend fun session(before: String, startWithin: Long?): String? = coroutineScope {
+        var started = false
         var heard: String? = null
-        speechInput.listen(settings.speechLanguage).collect { event ->
-            when (event) {
-                is SpeechInput.Event.Level -> _state.update { it.copy(level = event.value) }
-                is SpeechInput.Event.Partial -> _state.update { it.copy(heard = event.text) }
-                is SpeechInput.Event.Final -> {
-                    heard = event.text.ifBlank { null }
-                    _state.update { it.copy(heard = event.text, level = 0f) }
-                }
-                is SpeechInput.Event.Failed -> _state.update {
-                    it.copy(phase = Phase.Idle, level = 0f, error = SpeechInput.describe(event.code))
+        lastError = null
+        val recording = launch {
+            speechInput.listen(settings.speechLanguage, settings.listenPatience.silenceMillis).collect { event ->
+                when (event) {
+                    SpeechInput.Event.SpeechStarted -> started = true
+                    is SpeechInput.Event.Level -> _state.update { it.copy(level = event.value) }
+                    is SpeechInput.Event.Partial -> {
+                        started = true
+                        _state.update { it.copy(heard = "$before ${event.text}".trim()) }
+                    }
+                    is SpeechInput.Event.Final -> heard = event.text.ifBlank { null }
+                    is SpeechInput.Event.Failed -> lastError = event.code
                 }
             }
         }
-        if (heard == null && _state.value.error == null) {
-            _state.update { it.copy(phase = Phase.Idle, error = "I didn't catch that. Tap the orb to try again.") }
+        val watchdog = startWithin?.let { window ->
+            launch {
+                delay(window)
+                if (!started) recording.cancel()
+            }
         }
-        return heard
+        recording.join()
+        watchdog?.cancel()
+        _state.update { it.copy(level = 0f) }
+        heard
     }
 
     override fun onCleared() {
@@ -129,10 +207,13 @@ class AssistantViewModel(
     companion object {
         private const val AUTO_CLOSE_MS = 2_500L
 
+        /** How long to wait for an answer after Jarvis asked something. */
+        private const val FOLLOW_UP_WINDOW_MS = 6_000L
+
         val Factory = viewModelFactory {
             initializer {
                 val app = this[APPLICATION_KEY] as JarvisApp
-                AssistantViewModel(SpeechInput(app), app.speechOutput, RuleBrain(CommandExecutor(app)), app.settings)
+                AssistantViewModel(SpeechInput(app), app.speechOutput, HybridBrain(CommandExecutor(app), app.llm), app.settings)
             }
         }
     }

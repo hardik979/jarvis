@@ -77,6 +77,8 @@ class CommandParserTest {
         assertEquals(Command.OpenApp("instagram"), parse("instagram kholo"))
         assertEquals(Command.OpenApp("camera"), parse("camera open karo"))
         assertEquals(Command.OpenApp("youtube"), parse("youtube chalao"))
+        // Said on the S23 during testing: fillers must not end up in a search query.
+        assertEquals(Command.OpenApp("youtube"), parse("एक काम कर दो यूट्यूब चला दो थोड़ा"))
     }
 
     @Test fun calls() {

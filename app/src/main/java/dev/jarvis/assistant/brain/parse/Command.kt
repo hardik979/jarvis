@@ -21,6 +21,9 @@ sealed interface Command {
 
     /** [who] is a contact name or a phone number. */
     data class Call(val who: String) : Command
+
+    /** Only the LLM produces this today: "Rahul ko message karo ki main late hoon". */
+    data class Message(val to: String, val text: String) : Command
     data class Navigate(val place: String) : Command
 
     /** [place] is null for "here". */

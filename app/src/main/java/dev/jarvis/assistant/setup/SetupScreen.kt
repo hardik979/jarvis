@@ -25,12 +25,14 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
@@ -43,11 +45,14 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.LifecycleResumeEffect
 import dev.jarvis.assistant.JarvisApp
+import dev.jarvis.assistant.llm.ModelManager
 import dev.jarvis.assistant.util.appLabel
 import dev.jarvis.assistant.voice.Lang
+import dev.jarvis.assistant.voice.ListenPatience
 import dev.jarvis.assistant.voice.SpeechInput
 import dev.jarvis.assistant.voice.SpeechLanguage
 import dev.jarvis.assistant.voice.SpeechOutput
+import kotlinx.coroutines.delay
 
 private data class Diagnostics(
     val speechEngine: String,
@@ -63,6 +68,7 @@ fun SetupScreen(app: JarvisApp, onTalk: () -> Unit) {
     var micGranted by remember { mutableStateOf(hasMicPermission(context)) }
     var isAssistant by remember { mutableStateOf(isDefaultAssistant(context)) }
     var language by remember { mutableStateOf(app.settings.speechLanguage) }
+    var patience by remember { mutableStateOf(app.settings.listenPatience) }
     val micLauncher = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { micGranted = it }
     var extrasGranted by remember { mutableStateOf(hasAll(context, OPTIONAL_PERMISSIONS)) }
     val extrasLauncher = rememberLauncherForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) {
@@ -128,9 +134,14 @@ fun SetupScreen(app: JarvisApp, onTalk: () -> Unit) {
                 actionLabel = "Allow",
                 onAction = { extrasLauncher.launch(OPTIONAL_PERMISSIONS) },
             )
-            LanguageCard(language) {
+            BrainCard(app.models)
+            ChoiceCard("I'll speak in", SpeechLanguage.entries, language, { it.label }) {
                 language = it
                 app.settings.speechLanguage = it
+            }
+            ChoiceCard("How long Jarvis waits when I pause", ListenPatience.entries, patience, { it.label }) {
+                patience = it
+                app.settings.listenPatience = it
             }
             ExamplesCard()
             DiagnosticsCard(diagnostics, onInstallVoices = { installVoices(context, it) })
@@ -170,11 +181,17 @@ private fun StepCard(title: String, body: String, done: Boolean, actionLabel: St
 }
 
 @Composable
-private fun LanguageCard(selected: SpeechLanguage, onSelect: (SpeechLanguage) -> Unit) {
+private fun <T> ChoiceCard(
+    title: String,
+    options: List<T>,
+    selected: T,
+    label: (T) -> String,
+    onSelect: (T) -> Unit,
+) {
     Card(Modifier.fillMaxWidth()) {
         Column(Modifier.padding(16.dp)) {
-            Text("I'll speak in", style = MaterialTheme.typography.titleMedium)
-            SpeechLanguage.entries.forEach { option ->
+            Text(title, style = MaterialTheme.typography.titleMedium)
+            options.forEach { option ->
                 Row(
                     Modifier
                         .fillMaxWidth()
@@ -183,8 +200,53 @@ private fun LanguageCard(selected: SpeechLanguage, onSelect: (SpeechLanguage) ->
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     RadioButton(selected = option == selected, onClick = null)
-                    Text(option.label, Modifier.padding(start = 8.dp))
+                    Text(label(option), Modifier.padding(start = 8.dp))
                 }
+            }
+        }
+    }
+}
+
+@Composable
+private fun BrainCard(models: ModelManager) {
+    var status by remember { mutableStateOf(models.status()) }
+    LaunchedEffect(Unit) {
+        while (true) {
+            status = models.status()
+            delay(1_000)
+        }
+    }
+    Card(Modifier.fillMaxWidth()) {
+        Row(
+            Modifier.padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(12.dp),
+        ) {
+            Column(Modifier.weight(1f)) {
+                Text("Brain: ${models.model.name}", style = MaterialTheme.typography.titleMedium)
+                val current = status
+                Text(
+                    when (current) {
+                        ModelManager.Status.Missing -> "Not downloaded (1.2 GB). Runs entirely on your phone."
+                        is ModelManager.Status.Downloading -> "Downloading… ${(current.progress * 100).toInt()}%"
+                        ModelManager.Status.Ready -> "Ready: Jarvis can chat and understand free-form requests."
+                        ModelManager.Status.Failed -> "Download failed. Try again."
+                    },
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+                if (current is ModelManager.Status.Downloading) {
+                    LinearProgressIndicator(
+                        progress = { current.progress },
+                        modifier = Modifier.fillMaxWidth().padding(top = 8.dp),
+                    )
+                }
+            }
+            if (status == ModelManager.Status.Missing || status == ModelManager.Status.Failed) {
+                FilledTonalButton(onClick = {
+                    models.startDownload()
+                    status = models.status()
+                }) { Text("Download") }
             }
         }
     }

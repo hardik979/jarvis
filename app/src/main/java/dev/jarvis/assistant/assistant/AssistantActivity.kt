@@ -39,7 +39,13 @@ class AssistantActivity : ComponentActivity() {
                 val state by viewModel.state.collectAsStateWithLifecycle()
                 AssistantScreen(
                     state = state,
-                    onOrbTap = { if (state.phase == Phase.Idle) listen() else viewModel.stopTurn() },
+                    onOrbTap = {
+                        when (state.phase) {
+                            Phase.Idle -> listen()
+                            Phase.Listening -> viewModel.finishSpeaking()
+                            Phase.Thinking, Phase.Speaking -> viewModel.stopTurn()
+                        }
+                    },
                     onDismiss = ::finish,
                 )
             }

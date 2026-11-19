@@ -13,3 +13,8 @@
 *.aab
 # On-device models are downloaded, never committed.
 *.gguf
+
+# Benchmark models and scratch output (third_party/llama.cpp is a git submodule)
+/models/
+__pycache__/
+tools/llm-bench/run-*.log

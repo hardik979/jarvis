@@ -51,7 +51,8 @@ SHOW     AssistantActivity: bottom card + orb over the current app
 
 ## Gotchas and notes
 
-- **Recognition service.** Android requires an assistant to declare a `RecognitionService`. Ours is a stub, and `SpeechInput` binds Google's recognizer explicitly instead of using the system default. After selecting Jarvis as assistant, verify other apps' voice input still works: `adb shell settings get secure voice_recognition_service` should not point at Jarvis.
+- **Recognition service.** Android requires an assistant to declare a `RecognitionService`. Ours is a stub, and `SpeechInput` binds Google's recognizer explicitly instead of using the system default. Verified on the S23 (Android 12+): with Jarvis as the assistant, `voice_recognition_service` stays on Google's recognizer, so other apps' voice input is unaffected.
+- **Turn-taking.** Google's recognizer ends a session about 0.15 s after it decides you stopped. `TurnTaking.wantsMore` keeps listening through pauses when the sentence sounds unfinished ("Mummy ko…") or is missing a detail. Replies can carry a `FollowUp` so Jarvis listens again after asking something.
 - **Screen context without accessibility.** `VoiceInteractionSession.onHandleAssist` gives the assistant the current app's view structure (and a screenshot, if the user allows it). This is the Play-safe route for "summarise this" in Phase 4.
 - **Samsung side key.** Double-press → Open app works on all One UI versions. Press-and-hold may only offer Bixby or the power menu, depending on the One UI version.
 - **Wake word licence.** openWakeWord's code is Apache-2.0, but its pretrained models are CC BY-NC-SA. Train our own model or use sherpa-onnx keyword spotting for the public release.

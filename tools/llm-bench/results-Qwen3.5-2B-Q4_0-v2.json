@@ -1,0 +1,181 @@
+{
+  "model": "Qwen3.5-2B-Q4_0",
+  "prompt": "v2",
+  "file_gb": 1.21,
+  "tokens": {
+    "english": 15,
+    "hindi": 25,
+    "hinglish": 18
+  },
+  "commands": [
+    {
+      "text": "{\"action\":\"message\",\"to\":\"Rahul\",\"text\":\"main 10 minute late hoon\"}",
+      "wall_s": 4.75,
+      "prompt_tokens": 412,
+      "first_token_ms": 3663,
+      "prefill_tps": 112.5,
+      "decode_tps": 21.1,
+      "tokens_out": 22,
+      "ok": true,
+      "utterance": "Rahul ko message karo ki main 10 minute late hoon"
+    },
+    {
+      "text": "{\"action\":\"alarm\",\"time\":\"06:00\"}",
+      "wall_s": 1.22,
+      "prompt_tokens": 29,
+      "first_token_ms": 380,
+      "prefill_tps": 76.4,
+      "decode_tps": 16.3,
+      "tokens_out": 14,
+      "ok": true,
+      "utterance": "kal subah gym jaana hai, 6 baje utha dena"
+    },
+    {
+      "text": "{\"action\":\"torch\",\"on\":true}",
+      "wall_s": 0.87,
+      "prompt_tokens": 26,
+      "first_token_ms": 371,
+      "prefill_tps": 70.1,
+      "decode_tps": 19.3,
+      "tokens_out": 10,
+      "ok": true,
+      "utterance": "itna andhera hai, thodi roshni karo"
+    },
+    {
+      "text": "{\"action\":\"media\",\"control\":\"previous\"}",
+      "wall_s": 0.89,
+      "prompt_tokens": 20,
+      "first_token_ms": 325,
+      "prefill_tps": 61.6,
+      "decode_tps": 16.7,
+      "tokens_out": 10,
+      "ok": false,
+      "utterance": "gaana thoda dheere karo"
+    },
+    {
+      "text": "{\"action\":\"navigate\",\"place\":\"Delhi\"}",
+      "wall_s": 0.92,
+      "prompt_tokens": 23,
+      "first_token_ms": 358,
+      "prefill_tps": 64.3,
+      "decode_tps": 18.7,
+      "tokens_out": 11,
+      "ok": true,
+      "utterance": "मुझे दिल्ली जाना है, रास्ता दिखाओ"
+    },
+    {
+      "text": "{\"action\":\"weather\",\"place\":\"Pune\",\"day\":\"tomorrow\"}",
+      "wall_s": 1.18,
+      "prompt_tokens": 19,
+      "first_token_ms": 326,
+      "prefill_tps": 58.3,
+      "decode_tps": 18.2,
+      "tokens_out": 16,
+      "ok": true,
+      "utterance": "Will it rain in Pune tomorrow?"
+    },
+    {
+      "text": "{\"action\":\"timer\",\"seconds\":3600}",
+      "wall_s": 1.12,
+      "prompt_tokens": 22,
+      "first_token_ms": 409,
+      "prefill_tps": 53.7,
+      "decode_tps": 18.0,
+      "tokens_out": 13,
+      "ok": false,
+      "utterance": "aadhe ghante baad yaad dilana"
+    },
+    {
+      "text": "{\"action\":\"chat\",\"reply\":\"India won the 2011 Cricket World Cup, defeating Australia in the final.\"}",
+      "wall_s": 1.89,
+      "prompt_tokens": 24,
+      "first_token_ms": 329,
+      "prefill_tps": 73.0,
+      "decode_tps": 17.1,
+      "tokens_out": 27,
+      "ok": true,
+      "utterance": "Who won the 2011 cricket world cup?"
+    },
+    {
+      "text": "{\"action\":\"chat\",\"reply\":\"चलो, कोई अच्छा गाना सुनते हैं या एक मज़ेदार किस्सा सुनाऊं?\"}",
+      "wall_s": 2.54,
+      "prompt_tokens": 30,
+      "first_token_ms": 461,
+      "prefill_tps": 65.0,
+      "decode_tps": 17.1,
+      "tokens_out": 36,
+      "ok": true,
+      "utterance": "भाई मेरा मूड खराब है, कुछ अच्छा बोलो"
+    },
+    {
+      "text": "{\"action\":\"open_app\",\"name\":\"Swiggy\"}",
+      "wall_s": 1.12,
+      "prompt_tokens": 25,
+      "first_token_ms": 376,
+      "prefill_tps": 66.5,
+      "decode_tps": 17.1,
+      "tokens_out": 13,
+      "ok": true,
+      "utterance": "the app where I order food, swiggy, open it"
+    },
+    {
+      "text": "{\"action\":\"open_app\",\"name\":\"WhatsApp\"}",
+      "wall_s": 1.35,
+      "prompt_tokens": 19,
+      "first_token_ms": 389,
+      "prefill_tps": 48.8,
+      "decode_tps": 10.7,
+      "tokens_out": 11,
+      "ok": false,
+      "utterance": "पापा को फोन लगाओ"
+    },
+    {
+      "text": "{\"action\":\"media\",\"control\":\"previous\"}",
+      "wall_s": 0.92,
+      "prompt_tokens": 17,
+      "first_token_ms": 340,
+      "prefill_tps": 50.0,
+      "decode_tps": 16.1,
+      "tokens_out": 10,
+      "ok": false,
+      "utterance": "skip this song yaar"
+    }
+  ],
+  "command_accuracy": "8/12",
+  "first_token_ms_cold": 3663,
+  "first_token_ms_warm": 371,
+  "reply_s_median": 1.12,
+  "ram_mb": 2063,
+  "chats": [
+    {
+      "text": "भारत की राजधानी **नई दिल्ली** है।\n\nयहाँ घूमने लायक दो जगहें हैं:\n1. **दिल्ली मस्जिद** (सुंदरबाद)\n2. **नई दिल्ली का पार्क** (सुंदरबाद)",
+      "wall_s": 5.19,
+      "prompt_tokens": 45,
+      "first_token_ms": 671,
+      "prefill_tps": 67.0,
+      "decode_tps": 16.0,
+      "tokens_out": 72,
+      "prompt": "भारत की राजधानी क्या है और वहाँ घूमने लायक दो जगहें बताओ। छोटा जवाब दो।"
+    },
+    {
+      "text": "1. **Phone se door rahein:** Ek baar phone band karein aur 15 minute tak koi video ya game na dekhein.\n2. **Doodh aur chawal:** Ek chhota sa doodh aur chawal ka cup khate hue, phir 10 minute baad raaste se nikal jayein.",
+      "wall_s": 5.85,
+      "prompt_tokens": 38,
+      "first_token_ms": 520,
+      "prefill_tps": 73.1,
+      "decode_tps": 14.4,
+      "tokens_out": 77,
+      "prompt": "Mujhe neend nahi aa rahi, 2 tips do. Hinglish mein chhota jawab do."
+    },
+    {
+      "text": "Sunlight contains all colors of the visible spectrum, but the atmosphere scatters shorter blue wavelengths more effectively than longer red ones. This process, known as Rayleigh scattering, causes the blue light to fill the sky while the longer wavelengths pass through to your eyes.",
+      "wall_s": 3.87,
+      "prompt_tokens": 23,
+      "first_token_ms": 404,
+      "prefill_tps": 56.9,
+      "decode_tps": 15.2,
+      "tokens_out": 53,
+      "prompt": "Explain in two sentences why the sky is blue."
+    }
+  ]
+}

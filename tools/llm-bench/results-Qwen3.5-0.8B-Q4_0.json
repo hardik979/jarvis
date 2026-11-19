@@ -1,0 +1,183 @@
+{
+  "model": "Qwen3.5-0.8B-Q4_0",
+  "file_gb": 0.51,
+  "raw": {
+    "prefill_t5": 251.5,
+    "decode_t5": 43.7
+  },
+  "tokens": {
+    "english": 15,
+    "hindi": 25,
+    "hinglish": 18
+  },
+  "commands": [
+    {
+      "text": "{\n  \"action\": \"call\",\n  \"args\": {\n    \"who\": \"Rahul\"\n  },\n  \"say\": \"Rahul, main 10 minute late hoon.\"\n}",
+      "wall_s": 2.08,
+      "prompt_tokens": 198,
+      "first_token_ms": 802,
+      "prefill_tps": 247.0,
+      "decode_tps": 44.5,
+      "tokens_out": 49,
+      "ok": false,
+      "utterance": "Rahul ko message karo ki main 10 minute late hoon"
+    },
+    {
+      "text": "{\n  \"action\": \"call\",\n  \"args\": {\n    \"who\": \"yourself\"\n  },\n  \"say\": \"Kaal subah gym jaana hai, 6 baje utha dena.\"\n}",
+      "wall_s": 1.73,
+      "prompt_tokens": 29,
+      "first_token_ms": 166,
+      "prefill_tps": 175.0,
+      "decode_tps": 39.0,
+      "tokens_out": 56,
+      "ok": false,
+      "utterance": "kal subah gym jaana hai, 6 baje utha dena"
+    },
+    {
+      "text": "{\n  \"action\": \"call\",\n  \"args\": {\n    \"who\": \"your user\"\n  },\n  \"say\": \"aap ko kya baat hai?\"\n}",
+      "wall_s": 1.58,
+      "prompt_tokens": 26,
+      "first_token_ms": 174,
+      "prefill_tps": 149.4,
+      "decode_tps": 37.4,
+      "tokens_out": 46,
+      "ok": false,
+      "utterance": "itna andhera hai, thodi roshni karo"
+    },
+    {
+      "text": "{\n  \"action\": \"call\",\n  \"args\": {\n    \"who\": \"user\"\n  },\n  \"say\": \"Gharaa, aap kya chahiye?\"\n}",
+      "wall_s": 1.67,
+      "prompt_tokens": 20,
+      "first_token_ms": 141,
+      "prefill_tps": 142.3,
+      "decode_tps": 35.6,
+      "tokens_out": 49,
+      "ok": false,
+      "utterance": "gaana thoda dheere karo"
+    },
+    {
+      "text": "{\n  \"action\": \"navigate\",\n  \"args\": {\n    \"place\": \"दिल्ली\"\n  },\n  \"say\": \"दिल्ली की रास्ता दिखाओ\"\n}",
+      "wall_s": 1.77,
+      "prompt_tokens": 23,
+      "first_token_ms": 180,
+      "prefill_tps": 127.9,
+      "decode_tps": 32.9,
+      "tokens_out": 47,
+      "ok": true,
+      "utterance": "मुझे दिल्ली जाना है, रास्ता दिखाओ"
+    },
+    {
+      "text": "{\n  \"action\": \"weather\",\n  \"args\": {\n    \"place\": \"Pune\",\n    \"day\": \"tomorrow\"\n  },\n  \"say\": \"Pune won't rain tomorrow.\"\n}",
+      "wall_s": 1.97,
+      "prompt_tokens": 19,
+      "first_token_ms": 187,
+      "prefill_tps": 101.7,
+      "decode_tps": 31.8,
+      "tokens_out": 53,
+      "ok": true,
+      "utterance": "Will it rain in Pune tomorrow?"
+    },
+    {
+      "text": "{\n  \"action\": \"chat\",\n  \"args\": {\n    \"text\": \"आदह गंटा बाद याद दिला है।\"\n  },\n  \"say\": \"आदह गंटा बाद याद दिला है।\"\n}",
+      "wall_s": 2.11,
+      "prompt_tokens": 22,
+      "first_token_ms": 190,
+      "prefill_tps": 115.5,
+      "decode_tps": 34.0,
+      "tokens_out": 62,
+      "ok": false,
+      "utterance": "aadhe ghante baad yaad dilana"
+    },
+    {
+      "text": "{\n  \"action\": \"chat\",\n  \"args\": {\n    \"text\": \"The 2011 Cricket World Cup was won by England.\"\n  },\n  \"say\": \"England\"\n}",
+      "wall_s": 1.96,
+      "prompt_tokens": 24,
+      "first_token_ms": 172,
+      "prefill_tps": 139.3,
+      "decode_tps": 30.8,
+      "tokens_out": 50,
+      "ok": false,
+      "utterance": "Who won the 2011 cricket world cup?"
+    },
+    {
+      "text": "{\n  \"action\": \"message\",\n  \"args\": {\n    \"to\": \"भाई\",\n    \"text\": \"मूड खराब तो ठीक बोलो।\"\n  },\n  \"say\": \"मूड खराब तो ठीक बोलो।\"\n}",
+      "wall_s": 2.68,
+      "prompt_tokens": 30,
+      "first_token_ms": 230,
+      "prefill_tps": 130.2,
+      "decode_tps": 31.4,
+      "tokens_out": 73,
+      "ok": false,
+      "utterance": "भाई मेरा मूड खराब है, कुछ अच्छा बोलो"
+    },
+    {
+      "text": "{\n  \"action\": \"open_app\",\n  \"args\": {\n    \"name\": \"swiggy\"\n  },\n  \"say\": \"Swiggy\"\n}",
+      "wall_s": 1.8,
+      "prompt_tokens": 25,
+      "first_token_ms": 187,
+      "prefill_tps": 133.5,
+      "decode_tps": 30.0,
+      "tokens_out": 43,
+      "ok": true,
+      "utterance": "the app where I order food, swiggy, open it"
+    },
+    {
+      "text": "{\n  \"action\": \"call\",\n  \"args\": {\n    \"who\": \"पापा\"\n  },\n  \"say\": \"पापा को फोन लगाओ\"\n}",
+      "wall_s": 1.82,
+      "prompt_tokens": 19,
+      "first_token_ms": 182,
+      "prefill_tps": 104.6,
+      "decode_tps": 31.6,
+      "tokens_out": 45,
+      "ok": true,
+      "utterance": "पापा को फोन लगाओ"
+    },
+    {
+      "text": "{\n  \"action\": \"call\",\n  \"args\": {\n    \"who\": \"yourself\"\n  },\n  \"say\": \"yar, skip karne ke baad main aapko baat karta hoon.\"\n}",
+      "wall_s": 2.04,
+      "prompt_tokens": 17,
+      "first_token_ms": 165,
+      "prefill_tps": 102.9,
+      "decode_tps": 32.3,
+      "tokens_out": 56,
+      "ok": false,
+      "utterance": "skip this song yaar"
+    }
+  ],
+  "command_accuracy": "4/12",
+  "first_token_ms_cold": 802,
+  "first_token_ms_warm": 180,
+  "ram_mb": 1222,
+  "chats": [
+    {
+      "text": "भारत की राजधानी **महाराष्ट्र** है।\n\nवहाँ घूमने लायक दो जगहें हैं:\n1. **डिप्लोमीशन (डिप्लोमीशन)** – यह एक छोटा सा बगीचा है जहाँ लोग शैक्षिक कार्यक्रम और विज्ञापन के लिए जाते हैं।\n2. **डिप्लोमीशन (डिप्लोमीशन)** – यह एक छोटा सा बगीचा है जहाँ लोग शैक्षिक कार्यक्रम और विज्ञापन के लिए जाते हैं।\n\n*(विकल्प के अनुसार दो जगहें चुन सकते हैं)*\n1.",
+      "wall_s": 5.12,
+      "prompt_tokens": 45,
+      "first_token_ms": 289,
+      "prefill_tps": 155.7,
+      "decode_tps": 32.7,
+      "tokens_out": 150,
+      "prompt": "भारत की राजधानी क्या है और वहाँ घूमने लायक दो जगहें बताओ। छोटा जवाब दो।"
+    },
+    {
+      "text": "1. **Apne paas ka ek bada baat rakho** – Agar aapko koi baat nahi hai, toh aapko apna baat khatam karein.\n2. **Koi baat nahi hai toh apni baat khatam karein** – Agar aapko koi baat nahi hai, toh aapko apna baat khatam karein.",
+      "wall_s": 3.74,
+      "prompt_tokens": 38,
+      "first_token_ms": 240,
+      "prefill_tps": 158.6,
+      "decode_tps": 31.5,
+      "tokens_out": 98,
+      "prompt": "Mujhe neend nahi aa rahi, 2 tips do. Hinglish mein chhota jawab do."
+    },
+    {
+      "text": "The sky appears blue because sunlight is scattered by the Earth's atmosphere, which is thicker near the horizon where it is shorter and denser, causing the blue light to be refracted and dispersed into the sky.",
+      "wall_s": 1.75,
+      "prompt_tokens": 23,
+      "first_token_ms": 164,
+      "prefill_tps": 140.6,
+      "decode_tps": 32.0,
+      "tokens_out": 43,
+      "prompt": "Explain in two sentences why the sky is blue."
+    }
+  ]
+}

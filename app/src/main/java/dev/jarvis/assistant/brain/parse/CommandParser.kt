@@ -21,7 +21,10 @@ object CommandParser {
     // The wake word and politeness carry no meaning for the rules.
     private val WAKE_WORD =
         Regex("^(?:${alt("hey", "hi", "ok", "okay", "हे", "ओके")} )?${alt("jarvis", "जार्विस", "जारविस")}(?: |$)")
-    private val FILLERS = Words("please", "plz", "pls", "प्लीज", "zara", "जरा", "can you", "could you", "will you")
+    private val FILLERS = Words(
+        "please", "plz", "pls", "प्लीज", "zara", "जरा", "can you", "could you", "will you", "ek kaam karo",
+        "ek kaam kar do", "एक काम करो", "एक काम कर दो", "thoda", "थोड़ा", "yaar", "यार",
+    )
 
     private fun clean(input: String) = FILLERS.removeFrom(normalize(input).replace(WAKE_WORD, ""))
 

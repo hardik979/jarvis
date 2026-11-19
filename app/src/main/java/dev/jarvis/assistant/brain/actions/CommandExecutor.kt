@@ -13,6 +13,7 @@ import android.os.BatteryManager
 import android.provider.AlarmClock
 import android.provider.Settings
 import android.view.KeyEvent
+import dev.jarvis.assistant.brain.FollowUp
 import dev.jarvis.assistant.brain.Reply
 import dev.jarvis.assistant.brain.parse.ClockTime
 import dev.jarvis.assistant.brain.parse.Command
@@ -44,25 +45,30 @@ class CommandExecutor(private val context: Context) {
             is Command.Timer -> timer(command.seconds, say)
             is Command.OpenApp -> openApp(command.name, say)
             is Command.Call -> call(command.who, say)
+            is Command.Message -> message(command.to, command.text, say)
             is Command.Navigate -> navigate(command.place, say)
             is Command.Weather -> weather(command, lang, say)
             is Command.WebSearch -> webSearch(command.query, say("Searching the web.", "वेब पर खोज रहे हैं।"))
             is Command.YouTube -> youTube(command.query, say)
             is Command.OpenSettings -> settings(command.panel, say)
-            Command.Hello -> Reply(say("Hi! How can I help?", "नमस्ते! बताइए, क्या करना है?"))
-            Command.HowAreYou -> Reply(say("All systems running. What can I do for you?", "सब बढ़िया! बताइए, क्या मदद करूं?"))
+            Command.Hello -> Reply(say("Hi! How can I help?", "नमस्ते! बताइए, क्या करना है?"), followUp = FollowUp())
+            Command.HowAreYou -> Reply(
+                say("All systems running. What can I do for you?", "सब बढ़िया! बताइए, क्या मदद करूं?"),
+                followUp = FollowUp(),
+            )
             Command.WhoAreYou -> Reply(
                 say("I'm Jarvis, your assistant. I run right here on your phone.", "मैं Jarvis हूं, आपका असिस्टेंट, जो आपके फोन पर ही चलता है।")
             )
             Command.Thanks -> Reply(say("Anytime!", "कोई बात नहीं!"))
-            Command.Attention -> Reply(say("Yes?", "जी, बताइए?"))
+            Command.Attention -> Reply(say("Yes?", "जी, बताइए?"), followUp = FollowUp())
             Command.Help -> Reply(
                 say(
                     "I can set alarms and timers, call your contacts, open apps, play music, control volume and " +
                         "the flashlight, check the weather, time and battery, give directions and search the web.",
                     "अलार्म और टाइमर, कॉल, ऐप खोलना, गाने, आवाज और टॉर्च, मौसम, समय और बैटरी, रास्ता और वेब सर्च, " +
                         "ये सब बस बोलकर करवाइए।",
-                )
+                ),
+                followUp = FollowUp(),
             )
             is Command.Unknown ->
                 if (command.isQuestion) webSearch(command.text, say("Here's what I found on the web.", "वेब पर यह मिला।"))
@@ -143,7 +149,7 @@ class CommandExecutor(private val context: Context) {
     }
 
     private fun alarm(time: ClockTime?, say: Say): Reply {
-        time ?: return Reply(say("For what time? Try: set an alarm for 7 AM.", "किस समय का? जैसे बोलिए: सुबह 7 बजे का अलार्म लगाओ।"))
+        time ?: return Reply(say("For what time?", "किस समय का?"), followUp = FollowUp("alarm"))
         val intent = Intent(AlarmClock.ACTION_SET_ALARM)
             .putExtra(AlarmClock.EXTRA_HOUR, time.hour)
             .putExtra(AlarmClock.EXTRA_MINUTES, time.minute)
@@ -152,7 +158,7 @@ class CommandExecutor(private val context: Context) {
     }
 
     private fun timer(seconds: Int?, say: Say): Reply {
-        seconds ?: return Reply(say("For how long? Try: set a timer for 5 minutes.", "कितनी देर का? जैसे बोलिए: 5 मिनट का टाइमर लगाओ।"))
+        seconds ?: return Reply(say("For how long?", "कितनी देर का?"), followUp = FollowUp("timer"))
         val intent = Intent(AlarmClock.ACTION_SET_TIMER)
             .putExtra(AlarmClock.EXTRA_LENGTH, seconds.coerceAtMost(24 * 60 * 60))
             .putExtra(AlarmClock.EXTRA_SKIP_UI, true)
@@ -185,6 +191,17 @@ class CommandExecutor(private val context: Context) {
         return Reply(say("Calling $label.", "$label को कॉल कर रहे हैं।"), launch = intent, speak = false)
     }
 
+    // Opens the SMS app with the text filled in; the user taps send (no SMS permission needed).
+    private suspend fun message(to: String, text: String, say: Say): Reply {
+        if (!contacts.canRead()) {
+            return Reply(say("Allow Contacts in the Jarvis app first.", "पहले Jarvis ऐप में Contacts की अनुमति दें।"))
+        }
+        val contact = contacts.find(to)
+            ?: return Reply(say("I couldn't find $to in your contacts.", "कॉन्टैक्ट्स में $to नहीं मिला।"))
+        val intent = Intent(Intent.ACTION_SENDTO, Uri.fromParts("smsto", contact.number, null)).putExtra("sms_body", text)
+        return Reply(say("Message to ${contact.name} is ready.", "${contact.name} के लिए मैसेज तैयार है।"), launch = intent, speak = false)
+    }
+
     private fun navigate(place: String, say: Say) = Reply(
         say("Getting directions to $place.", "$place का रास्ता दिखा रहे हैं।"),
         launch = Intent(Intent.ACTION_VIEW, Uri.parse("google.navigation:q=" + Uri.encode(place))),
@@ -213,19 +230,17 @@ class CommandExecutor(private val context: Context) {
             }
         )
     } catch (e: WeatherService.Failure) {
-        Reply(
-            when (e.problem) {
-                WeatherService.Problem.NoLocation -> say(
-                    "I need your location for that. Allow it in the Jarvis app, or name a city.",
-                    "इसके लिए लोकेशन चाहिए। Jarvis ऐप में अनुमति दें, या किसी शहर का नाम लें।",
-                )
-                WeatherService.Problem.UnknownPlace -> say("I couldn't find ${command.place}.", "${command.place} नहीं मिला।")
-                WeatherService.Problem.Offline -> say(
-                    "I can't reach the weather service. Check your internet.",
-                    "मौसम की जानकारी नहीं मिल पाई। इंटरनेट चेक करें।",
-                )
-            }
-        )
+        when (e.problem) {
+            // Whatever city they say next answers the question.
+            WeatherService.Problem.NoLocation -> Reply(
+                say("I don't have your location. Which city?", "आपकी लोकेशन नहीं मिली। कौन सा शहर?"),
+                followUp = FollowUp(if (command.tomorrow) "weather tomorrow in" else "weather in"),
+            )
+            WeatherService.Problem.UnknownPlace -> Reply(say("I couldn't find ${command.place}.", "${command.place} नहीं मिला।"))
+            WeatherService.Problem.Offline -> Reply(
+                say("I can't reach the weather service. Check your internet.", "मौसम की जानकारी नहीं मिल पाई। इंटरनेट चेक करें।")
+            )
+        }
     }
 
     private fun webSearch(query: String, text: String) = Reply(
